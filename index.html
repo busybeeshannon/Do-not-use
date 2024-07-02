@@ -1,0 +1,49 @@
+<iframe id="spotfireIframe" src="https://spotfire-next.cloud.tibco.com/spotfire/wp/OpenAnalysis?file=/Teams/01J1QQWYFZXZ9MRKPFRXE21V9A/Siftwell/endpoint_pfile_20050523-20240609&configurationBlock=SetPage%28pageIndex%3D0%29%3B&options=13-1,10-1,9-1,5-1,6-0,17-1,11-1,12-1,14-1,1-1,3-1,18-1,7-1,15-1,19-1,4-1,2-1&ZipCodeArc=23803" width="100%" height="600"></iframe>
+<script type="text/javascript">
+    var map = ... // Initialize your ArcGIS map here
+
+    map.on('click', function(event) {
+        var selectedZip = event.graphic.attributes.Zip_Code_5;
+        var spotfireIframe = document.getElementById('spotfireIframe');
+        spotfireIframe.src = `https://spotfire-next.cloud.tibco.com/spotfire/wp/OpenAnalysis?file=/Teams/01J1QQWYFZXZ9MRKPFRXE21V9A/Siftwell/endpoint_pfile_20050523-20240609&configurationBlock=SetPage%28pageIndex%3D0%29%3B&options=13-1,10-1,9-1,5-1,6-0,17-1,11-1,12-1,14-1,1-1,3-1,18-1,7-1,15-1,19-1,4-1,2-1&ZipCodeArc=${selectedZip}`;
+    });
+</script>
+
+
+<iframe id="spotfireIframe" 
+        src=src="https://spotfire-next.cloud.tibco.com/spotfire/wp/OpenAnalysis?file=/Teams/01J1QQWYFZXZ9MRKPFRXE21V9A/Siftwell/endpoint_pfile_20050523-20240609&configurationBlock=SetPage%28pageIndex%3D0%29%3B&options=13-1,10-1,9-1,5-1,6-0,17-1,11-1,12-1,14-1,1-1,3-1,18-1,7-1,15-1,19-1,4-1,2-1&ZipCodeArc=23803" 
+        width="100%" height="600"></iframe>
+<div id="viewDiv" style="width: 100%; height: 600px;"></div>
+<script type="text/javascript">
+    require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/WebMap"
+    ], function(Map, MapView, WebMap) {
+        var webmap = new WebMap({
+            portalItem: { // autocasts as new PortalItem()
+                id: "f040b9ca281541a99e85630ac75fdbfc" // This is the ID for your AGO map "Util"
+            }
+        });
+
+        var view = new MapView({
+            container: "viewDiv",
+            map: webmap,
+            center: [-118.805, 34.027], // Update this to center the map as needed
+            zoom: 13 // Update this to the desired zoom level
+        });
+
+        view.on('click', function(event) {
+            view.hitTest(event).then(function(response) {
+                if (response.results.length) {
+                    var graphic = response.results.filter(function(result) {
+                        return result.graphic;
+                    })[0].graphic;
+                    var selectedZip = graphic.attributes.ZIP_CODE; // Ensure this matches your attribute name
+                    var spotfireIframe = document.getElementById('spotfireIframe');
+                    spotfireIframe.src = `https://spotfire-next.cloud.tibco.com/spotfire/wp/OpenAnalysis?file=/Teams/01J1QQWYFZXZ9MRKPFRXE21V9A/Siftwell/endpoint_pfile_20050523-20240609&configurationBlock=SetPage%28pageIndex%3D0%29%3B&options=13-1,10-1,9-1,5-1,6-0,17-1,11-1,12-1,14-1,1-1,3-1,18-1,7-1,15-1,19-1,4-1,2-1&ZipCodeArc=${selectedZip}`;
+                }
+            });
+        });
+    });
+</script>
